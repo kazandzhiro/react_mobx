@@ -9,6 +9,6 @@
             "name" : "SSD",
             "price" : 100,
             "currency" : "USD"
-        },
+        }
     ]
 }
