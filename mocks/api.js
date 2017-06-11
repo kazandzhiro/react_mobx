@@ -1,17 +1,25 @@
-export const products = {
-    "products" : [
-        {
-            "name" : "TV",
-            "price" : 1000,
-            "currency" : "USD"
-        },
-        {
-            "name" : "SSD",
-            "price" : 100,
-            "currency" : "USD"
-        }
-    ]
-}
+export const products = [
+    {
+        "name" : "TV",
+        "price" : 1000,
+        "currency" : "USD"
+    },
+    {
+        "name" : "SSD",
+        "price" : 100,
+        "currency" : "USD"
+    },
+    {
+        "name" : "Mobile Phone",
+        "price" : 600,
+        "currency" : "USD"
+    },
+    {
+        "name" : "16GB RAM",
+        "price" : 200,
+        "currency" : "USD"
+    }
+]
 
 export const users = [
     { id: 1, name: 'admin', 'permissions' : ['CREATE', 'READ', 'UPDATE', 'DELETE'] },
