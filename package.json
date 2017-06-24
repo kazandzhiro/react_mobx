@@ -10,7 +10,7 @@
     "mobx-react-router": "^4.0.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "react-router": "^4.1.1",
+    "react-router-dom": "^4.1.1",
     "validatorjs": "^3.13.3"
   },
   "devDependencies": {
@@ -89,7 +89,13 @@
     ],
     "plugins": [
       "transform-decorators-legacy",
-      [ "import",{ "libraryName": "antd", "style": "css" } ]
+      [
+        "import",
+        {
+          "libraryName": "antd",
+          "style": "css"
+        }
+      ]
     ]
   },
   "eslintConfig": {
