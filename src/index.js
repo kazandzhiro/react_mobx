@@ -1,35 +1,43 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'mobx-react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory';
 import { RouterStore, syncHistoryWithStore } from 'mobx-react-router';
 
+import Store from './stores';
 import App from './components/App';
 import Login from './pages/Login';
 import Home from './pages/Home';
-import './index.css';
+import NotFound from './pages/NotFound';
+import ProtectedRoute from './components/Auth';
 import registerServiceWorker from './registerServiceWorker';
+import './index.css';
+
 
 const browserHistory = createBrowserHistory();
 const routingStore = new RouterStore();
 
 const stores = {
   routing: routingStore,
-  // add more stroes
+  store: new Store()
 };
 
 const history = syncHistoryWithStore(browserHistory, routingStore);
-
 ReactDOM.render(
   <Provider {...stores}>
-    <Router history={history}>
-      <App>
-        <Route exact path="/" component={Login} />
-        <Route path="/home" component={Home} />
-      </App>
-    </Router>
+    <App>
+      <Router history={history}>
+        <Switch>
+          <Route path='/login' component={Login} />;
+          <ProtectedRoute exact path='/' component={Home} />;
+          <Route component={NotFound}/>
+        </Switch>
+      </Router>
+    </App>
   </Provider>,
   document.getElementById('root')
 );
 registerServiceWorker();
+
+// <RoutesAuth path="/" routes={routes}/>

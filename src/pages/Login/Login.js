@@ -1,24 +1,42 @@
 import React from 'react';
+import { withRouter, Redirect } from 'react-router-dom';
+import { inject , observer} from 'mobx-react';
+import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
+import api from '../../mocks/api';
 import './Login.css';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+
 const FormItem = Form.Item;
 
+@inject('store', 'routing')
+@observer
 class Login extends React.Component {
   handleSubmit = (e) => {
+    const { store } = this.props;
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.props.history.push('/home');
-        console.log('Received values of form: ', values);
+        // FIXME: invalidate fields and set error with custom validator func
+        api.fetchUser(values).then(
+          user => {
+            store.logIn();
+            store.setActiveUser(user)
+            this.props.routing.replace(store.redirectPath);
+          },
+          err => {
+            message.error(err);
+          }
+        );
       }
     });
   }
+
   render() {
     const { getFieldDecorator } = this.props.form;
-    return (
+    const { store } = this.props;
+    const form = (
       <Form onSubmit={this.handleSubmit} className="login-form">
         <FormItem>
-          {getFieldDecorator('userName', {
+          {getFieldDecorator('name', {
             rules: [{ required: true, message: 'Please input your username!' }],
           })(
             <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="Username" />
@@ -38,14 +56,15 @@ class Login extends React.Component {
           })(
             <Checkbox>Remember me</Checkbox>
           )}
-          <a className="login-form-forgot" href="">Forgot password</a>
-          <Button type="primary" htmlType="submit" className="login-form-button">
+          <a className="loginFormForgot" href="">Forgot password</a>
+          <Button type="primary" htmlType="submit" className="loginFormBtn">
             Log in
           </Button>
           Or <a href="">register now!</a>
         </FormItem>
       </Form>
     );
+    return store.isLoggedIn ? <Redirect to='/' /> : form;
   }
 }
-export default Form.create()(Login);
+export default withRouter(Form.create()(Login));
