@@ -9,6 +9,7 @@ import Store from './stores';
 import App from './components/App';
 import Login from './pages/Login';
 import Home from './pages/Home';
+import Product from './pages/Product';
 import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/Auth';
 import registerServiceWorker from './registerServiceWorker';
@@ -25,15 +26,19 @@ const stores = {
 const history = syncHistoryWithStore(browserHistory, routingStore);
 ReactDOM.render(
   <Provider {...stores}>
-    <App>
-      <Router history={history}>
+    <Router history={history}>
+      <App>
         <Switch>
           <Route path='/login' component={Login} />;
-          <ProtectedRoute exact path='/' component={Home} />;
+          <Route exact path='/' component={Home} />;
+          <Switch>
+            <Route path='/product/:action/:id' component={Product} />;
+            <Route path='/product/:id' component={Product} />;
+          </Switch>
           <Route component={NotFound}/>
         </Switch>
-      </Router>
-    </App>
+      </App>
+    </Router>
   </Provider>,
   document.getElementById('root')
 );

@@ -15,7 +15,8 @@ class Login extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // FIXME: invalidate fields and set error with custom validator func
-        return store.fetchUser(values).then(() => store.errors.map(errMsg => message.error(errMsg)));
+        return store.fetchUser(values)
+          .then(() => store.errors.map(errMsg => message.error(errMsg)));
       }
     });
   }

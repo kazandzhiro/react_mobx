@@ -9,13 +9,13 @@ const products = [
         "key": 2,
         "name" : "SSD",
         "price" : 100,
-        "currency" : "USD"
+        "currency" : "EUR"
     },
     {
         "key": 3,
         "name" : "Mobile Phone",
         "price" : 600,
-        "currency" : "USD"
+        "currency" : "BGN"
     },
     {
         "key": 4,
@@ -55,6 +55,17 @@ const fetchUser = ({name, password}) => {
   })
 }
 
+const fetchProduct = (id) => {
+  const product = products.filter(product => {
+    return product.key === id;
+  }).reduce((acc, product) => acc = product, {});
+  return new Promise((resolve, reject) => {
+    setTimeout(function() {
+      return product ? resolve(product) : reject('There is no such product!');
+    }, 1000);
+  })
+}
+
 const fetchAllProducts = () => {
   return new Promise((resolve, reject) => {
     setTimeout(function() {
@@ -66,5 +77,6 @@ const fetchAllProducts = () => {
 
 export default {
   fetchUser,
+  fetchProduct,
   fetchAllProducts
 }

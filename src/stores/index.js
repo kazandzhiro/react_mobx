@@ -10,7 +10,6 @@ class Store {
   @observable redirectPath = '/';
   @observable user = {};
   @observable isLoading = false;
-  @observable redirect = false;
 
   inProgress = () => {
     this.isLoading = true;
@@ -57,6 +56,16 @@ class Store {
   }
 
   @action
+  fetchProduct = async(id) => {
+    try{
+      this.product = await api.fetchProduct(id);
+      this.isLoading = false;
+    } catch(err) {
+        this.handleErrors(err);
+    }
+  }
+
+  @action
   fetchUser = async(user) => {
     this.inProgress();
     try{
@@ -72,56 +81,20 @@ class Store {
   }
 
   @action
-  create = async(product) => {
-    this.inProgress();
-    try{
-      const response = await this.service.create(product);
-      this.entities.push(response);
-      this.redirect = true;
-      this.isLoading = false;
-    } catch(err) {
-        this.handleErrors(err);
-    } finally {
-      this.resetRedirect();
-    }
+  create = (product) => {
+    product.key = Math.floor((1 + Math.random()) * 10000)
+    this.products.push(product);
   }
 
   @action
-  fetch = async(_id) => {
-    this.inProgress();
-    try {
-      const response = await this.service.get(_id)
-      this.product = response;
-      this.isLoading = false;
-    } catch(err) {
-      this.handleErrors(err)
-    }
+  update = (id, newData) => {
+    if(!id) return this.create(newData)
+    this.products = this.products.map(product => product.key === id ? newData : product);
   }
 
   @action
-  update = async(_id, product) => {
-    this.inProgress();
-    try{
-      const response = await this.service.patch(_id, product);
-      this.entities = this.entities.map(item => item._id === response._id ? response : item);
-      this.redirect = true;
-      this.isLoading = false;
-    } catch(err) {
-      this.handleErrors(err)
-    } finally {
-      this.resetRedirect();
-    }
-  }
-
-  @action
-  delete = async(_id) => {
-    await this.service.remove(_id)
-    try {
-      this.entities = this.entities.filter(item => item._id !== _id)
-    }
-    catch(err) {
-      this.handleErrors(err)
-    }
+  delete = (id) => {
+    this.products = this.products.filter(product => product.key !== id);
   }
 }
 

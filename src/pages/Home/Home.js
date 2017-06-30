@@ -1,17 +1,14 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { inject , observer} from 'mobx-react';
 import { Table, Button } from 'antd';
 import './Home.css';
-// {
-//   "key": 4,
-//   "name" : "16GB RAM",
-//   "price" : 200,
-//   "currency" : "USD"
-// }
-@inject('store')
+
+@inject('store', 'routing')
 @observer
 class Home extends React.Component {
-  columns = () => [{
+
+  columnDefinition = () => [{
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
@@ -36,18 +33,12 @@ class Home extends React.Component {
     ),
   }];
 
-  componentDidMount() {
-    this.props.store.fetchAllProducts();
-  }
-
   render() {
-    return (
-      <div>
-        <Table dataSource={Array.from(this.props.store.products)} columns={this.columns()}/>
-        <Button type="primary" className='addProductBtn'> Add Product </Button>
-      </div>
-      );
+    return (<div>
+          <Table dataSource={Array.from(this.props.store.products)} columns={this.columnDefinition()}/>
+          <Button type="primary" className='addProductBtn' onClick={() => { this.props.history.push('/product/add');}}> Add Product </Button>
+        </div>);
   }
 }
 
-export default Home;
+export default withRouter(Home);
