@@ -23,6 +23,11 @@ const stores = {
   store: new Store()
 };
 
+/* TODO: this is not a REST routing nor perfect but React router has limitations
+  which of course can be addressed with writing a HOC component on top of the router to
+  acknowledge type of dynamic props and not just naming as well as stripping the action verbs from
+  the url to make the app REST compliant.
+*/
 const history = syncHistoryWithStore(browserHistory, routingStore);
 ReactDOM.render(
   <Provider {...stores}>
@@ -30,11 +35,9 @@ ReactDOM.render(
       <App>
         <Switch>
           <Route path='/login' component={Login} />;
-          <Route exact path='/' component={Home} />;
-          <Switch>
-            <Route path='/product/:action/:id' component={Product} />;
-            <Route path='/product/:id' component={Product} />;
-          </Switch>
+          <ProtectedRoute exact path='/' component={Home} />;
+          <ProtectedRoute path='/product/:action/:id' component={Product} />;
+          <ProtectedRoute path='/product/:id' component={Product} />;
           <Route component={NotFound}/>
         </Switch>
       </App>

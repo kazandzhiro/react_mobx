@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Layout, Spin } from 'antd';
 import { inject, observer } from 'mobx-react';
@@ -29,3 +30,8 @@ class App extends React.Component {
 }
 
 export default withRouter(App);
+
+App.PropTypes = {
+  match: PropTypes.object,
+  store: PropTypes.object
+}

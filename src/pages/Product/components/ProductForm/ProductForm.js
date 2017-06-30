@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Form, Input, Select, Button, InputNumber } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { withRouter} from 'react-router-dom';
@@ -22,7 +23,7 @@ class ProductForm  extends React.Component {
     const { getFieldDecorator } = this.props.form;
     const readOnly = this.props.readOnly;
     const { store } = this.props;
-    const button = readOnly ? <Button type="primary" onClick={() => this.props.history.push('/')}>Back</Button> :
+    const submitBtn = readOnly ? null :
     (<Button type="primary" htmlType="submit">Submit</Button>);
     const form = <Form onSubmit={this.handleSubmit}>
       <Form.Item
@@ -69,10 +70,18 @@ class ProductForm  extends React.Component {
           </Select>
         )}
       </Form.Item>
-      {button}
+      <Button type="primary" onClick={() => this.props.history.push('/')}>Back</Button>
+      {submitBtn}
     </Form>
     return form;
   }
 }
 
 export default withRouter(Form.create()(ProductForm));
+
+ProductForm.PropTypes = {
+  form: PropTypes.object,
+  store: PropTypes.object,
+  readOnly: PropTypes.bool,
+  productId: PropTypes.number,
+}

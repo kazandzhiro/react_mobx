@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withRouter, Redirect } from 'react-router-dom';
 import { inject , observer} from 'mobx-react';
 import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
@@ -6,7 +7,7 @@ import './Login.css';
 
 const FormItem = Form.Item;
 
-@inject('store', 'routing')
+@inject('store')
 @observer
 class Login extends React.Component {
   handleSubmit = (e) => {
@@ -58,3 +59,9 @@ class Login extends React.Component {
   }
 }
 export default withRouter(Form.create()(Login));
+
+Login.PropTypes = {
+  store: PropTypes.object,
+  form: PropTypes.object,
+  history: PropTypes.object
+}

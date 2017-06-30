@@ -1,18 +1,34 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { inject , observer} from 'mobx-react';
 import { Table, Button } from 'antd';
 import './Home.css';
 
-@inject('store', 'routing')
+@inject('store')
 @observer
 class Home extends React.Component {
-
+  createActionBtn(action, label, id) {
+    let route = id ? `/product/${action}/${id}` : `/product/${action}`;
+    const permissions = this.props.store.user.permissions;
+    return (
+      ~permissions.indexOf(action.toUpperCase()) ?
+      <Button
+        type="primary"
+        onClick={() => { this.props.history.push(route);}}>
+          {label}
+        </Button> : null);
+  }
   columnDefinition = () => [{
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
-    render: text => <a href="">{text}</a>,
+    render: (text, record) => (
+      <a onClick={e => {
+        e.preventDefault();
+        this.props.history.push(`/product/${record.key}`);}
+      }>{record.name}</a>
+    )
   }, {
     title: 'Price',
     dataIndex: 'price',
@@ -26,9 +42,8 @@ class Home extends React.Component {
     key: 'action',
     render: (record) => (
       <span>
-        <Button type="primary" onClick={() => { this.props.history.push(`/product/update/${record.key}`)}}>Update</Button>
-        <span className="ant-divider" />
-        <Button type="primary" onClick={() => { this.props.history.push(`/product/delete/${record.key}`)}}>Delete</Button>
+        {this.createActionBtn('update', 'Update', record.key)}
+        {this.createActionBtn('delete', 'Delete', record.key)}
       </span>
     ),
   }];
@@ -36,14 +51,14 @@ class Home extends React.Component {
   render() {
     return (<div>
           <Table dataSource={Array.from(this.props.store.products)} columns={this.columnDefinition()}/>
-          <Button
-            type="primary"
-            className='add-product-btn'
-            onClick={() => { this.props.history.push('/product/create');}}>
-              Add Product
-            </Button>
+          {this.createActionBtn('create', 'Add Product')}
         </div>);
   }
 }
 
 export default withRouter(Home);
+
+Home.PropTypes = {
+  store: PropTypes.object,
+  history: PropTypes.object
+}

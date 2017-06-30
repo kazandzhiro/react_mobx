@@ -39,9 +39,8 @@ const users = [
     { id: 11, name: 'cud', password:'asd', 'permissions' : ['CREATE', 'UPDATE', 'DELETE'] },
     { id: 12, name: 'rud', password:'asd', 'permissions' : ['READ', 'UPDATE', 'DELETE'] },
     { id: 13, name: 'ru', password:'asd', 'permissions' : ['READ', 'UPDATE'] },
-    { id: 14, name: 'ru', password:'asd', 'permissions' : ['READ', 'DELETE'] },
-    { id: 15, name: 'ud', password:'asd', 'permissions' : ['UPDATE', 'DELETE'] },
-    { id: 16, name: 'ban', password:'asd', 'permissions' : [] },
+    { id: 14, name: 'rd', password:'asd', 'permissions' : ['READ', 'DELETE'] },
+    { id: 15, name: 'ud', password:'asd', 'permissions' : ['UPDATE', 'DELETE'] }
 ]
 
 const fetchUser = ({name, password}) => {
