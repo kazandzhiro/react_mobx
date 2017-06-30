@@ -48,7 +48,7 @@ class Store {
   fetchAllProducts = async() => {
     this.inProgress();
     try{
-      this.products = await api.fetchAllProducts();;
+      this.products = await api.fetchAllProducts();
       this.isLoading = false;
     } catch(err) {
         this.handleErrors(err);
@@ -58,8 +58,9 @@ class Store {
   @action
   fetchProduct = async(id) => {
     try{
+      const product = this.products.filter(product => product.key === id)[0];
+      if (product) return this.product = product;
       this.product = await api.fetchProduct(id);
-      this.isLoading = false;
     } catch(err) {
         this.handleErrors(err);
     }
@@ -81,20 +82,21 @@ class Store {
   }
 
   @action
-  create = (product) => {
+  create = async(product) => {
     product.key = Math.floor((1 + Math.random()) * 10000)
-    this.products.push(product);
+    this.products = await api.createProduct(product);
   }
 
   @action
-  update = (id, newData) => {
-    if(!id) return this.create(newData)
-    this.products = this.products.map(product => product.key === id ? newData : product);
+  update = async(id, data) => {
+    if(!id) return this.create(data)
+    data.key = id;
+    this.products = await api.updateProduct(data);
   }
 
   @action
-  delete = (id) => {
-    this.products = this.products.filter(product => product.key !== id);
+  delete = async(id) => {
+    this.products = await api.deleteProduct(id);
   }
 }
 

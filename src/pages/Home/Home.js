@@ -24,11 +24,11 @@ class Home extends React.Component {
   }, {
     title: 'Action',
     key: 'action',
-    render: (text, record) => (
+    render: (record) => (
       <span>
-        <a href="">Update</a>
+        <Button type="primary" onClick={() => { this.props.history.push(`/product/update/${record.key}`)}}>Update</Button>
         <span className="ant-divider" />
-        <a href="">Delete</a>
+        <Button type="primary" onClick={() => { this.props.history.push(`/product/delete/${record.key}`)}}>Delete</Button>
       </span>
     ),
   }];
@@ -36,7 +36,12 @@ class Home extends React.Component {
   render() {
     return (<div>
           <Table dataSource={Array.from(this.props.store.products)} columns={this.columnDefinition()}/>
-          <Button type="primary" className='addProductBtn' onClick={() => { this.props.history.push('/product/add');}}> Add Product </Button>
+          <Button
+            type="primary"
+            className='add-product-btn'
+            onClick={() => { this.props.history.push('/product/create');}}>
+              Add Product
+            </Button>
         </div>);
   }
 }

@@ -1,17 +1,18 @@
 import React from 'react';
 import { Form, Input, Select, Button, InputNumber } from 'antd';
 import { inject, observer } from 'mobx-react';
-import { withRouter, Redirect} from 'react-router-dom';
+import { withRouter} from 'react-router-dom';
 
-@inject('store', 'routing')
+@inject('store')
 @observer
 class ProductForm  extends React.Component {
+
   handleSubmit = (e) => {
     e.preventDefault();
-    const { store, id } = this.props;
+    const { store, productId } = this.props;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        store.update(id, values);
+        store.update(productId, values);
         this.props.history.push('/');
       }
     });

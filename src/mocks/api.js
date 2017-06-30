@@ -1,8 +1,8 @@
-const products = [
+let products = [
     {
         "key": 1,
         "name" : "TV",
-        "price" : 1000,
+        "price" : 500,
         "currency" : "USD"
     },
     {
@@ -51,7 +51,7 @@ const fetchUser = ({name, password}) => {
   return new Promise((resolve, reject) => {
     setTimeout(function() {
       return user.name ? resolve(user) : reject('User/Password combination is incorrect!');
-    }, 1000);
+    }, 500);
   })
 }
 
@@ -62,7 +62,7 @@ const fetchProduct = (id) => {
   return new Promise((resolve, reject) => {
     setTimeout(function() {
       return product ? resolve(product) : reject('There is no such product!');
-    }, 1000);
+    }, 500);
   })
 }
 
@@ -70,7 +70,37 @@ const fetchAllProducts = () => {
   return new Promise((resolve, reject) => {
     setTimeout(function() {
       resolve(products);
-    }, 1000);
+    }, 500);
+  })
+}
+
+const updateProduct = (data) => {
+  //FIXME: Here we are updating event with same values which will be filtered out with a real database
+  products = products.map(product => product.key === data.key ? data : product);
+  return new Promise((resolve, reject) => {
+    setTimeout(function() {
+      resolve(products);
+    }, 500);
+  })
+}
+
+const createProduct = (product) => {
+  products.push(product);
+  return new Promise((resolve, reject) => {
+    setTimeout(function() {
+      resolve(products);
+    }, 500);
+  })
+}
+
+const deleteProduct = (id) => {
+  products = products.filter(product => {
+    return product.key !== id;
+  })
+  return new Promise((resolve, reject) => {
+    setTimeout(function() {
+      resolve(products);
+    }, 500);
   })
 }
 
@@ -78,5 +108,8 @@ const fetchAllProducts = () => {
 export default {
   fetchUser,
   fetchProduct,
-  fetchAllProducts
+  fetchAllProducts,
+  updateProduct,
+  createProduct,
+  deleteProduct
 }

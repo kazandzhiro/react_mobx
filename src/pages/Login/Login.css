@@ -1,10 +1,10 @@
-.loginForm {
+.login-form {
   max-width: 300px;
   overflow: hidden;
 }
-.loginFormForgot {
+.login-form-forgot {
   float: right;
 }
-.loginFormBtn {
+.login-form-btn {
   width: 100%;
 }

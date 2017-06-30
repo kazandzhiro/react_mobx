@@ -14,7 +14,6 @@ class Login extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        // FIXME: invalidate fields and set error with custom validator func
         return store.fetchUser(values)
           .then(() => store.errors.map(errMsg => message.error(errMsg)));
       }
@@ -47,8 +46,8 @@ class Login extends React.Component {
           })(
             <Checkbox>Remember me</Checkbox>
           )}
-          <a className="loginFormForgot" href="">Forgot password</a>
-          <Button type="primary" htmlType="submit" className="loginFormBtn">
+          <a className="login-form-forgot" href="">Forgot password</a>
+          <Button type="primary" htmlType="submit" className="login-form-btn">
             Log in
           </Button>
           Or <a href="">register now!</a>

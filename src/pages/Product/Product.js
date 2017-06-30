@@ -9,28 +9,28 @@ class Product extends React.Component {
 
   fetchProduct(store, id, readOnly) {
     store.fetchProduct(id);
-    return <ProductForm readOnly productId={id} />;
+    return <ProductForm readOnly={readOnly} productId={id} />;
   }
 
   deleteProduct(store, id) {
     store.delete(id);
     return <Redirect to='/' />;
   }
-
+  // FIXME: We loading indicators here to improve UX
   renderStrategy(store, action, id) {
     switch(action) {
-      case 'add': return <ProductForm />;
-      case 'edit': return this.fetchProduct(store, id);
-      case 'delete': return this.deleteProduct(store, id);
-      case 'get': return this.fetchProduct(store, id, true);
+      case 'create': return <ProductForm />;
+      case 'read': return this.fetchProduct(store, id, true);
+      case 'update': return this.fetchProduct(store, id, false);
+      case 'delete': return this.deleteProduct(store, id, false);
       default: break;
     }
   }
 
   render() {
-    const { match, store } = this.props;
-    const id = match.params.id;
-    const action = isNaN(+id) ? id : (match.params.action || 'get');
+    const { match: { params }, store } = this.props;
+    const id = +params.id;
+    const action = isNaN(id) ? params.id : (params.action || 'read');
 
     return this.renderStrategy(store, action, id);
   }
