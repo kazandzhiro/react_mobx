@@ -14,7 +14,6 @@ import ProtectedRoute from './components/Auth';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 
-
 const browserHistory = createBrowserHistory();
 const routingStore = new RouterStore();
 
@@ -39,5 +38,3 @@ ReactDOM.render(
   document.getElementById('root')
 );
 registerServiceWorker();
-
-// <RoutesAuth path="/" routes={routes}/>
