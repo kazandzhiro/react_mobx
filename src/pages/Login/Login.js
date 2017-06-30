@@ -2,7 +2,6 @@ import React from 'react';
 import { withRouter, Redirect } from 'react-router-dom';
 import { inject , observer} from 'mobx-react';
 import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
-import api from '../../mocks/api';
 import './Login.css';
 
 const FormItem = Form.Item;
@@ -16,16 +15,7 @@ class Login extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // FIXME: invalidate fields and set error with custom validator func
-        api.fetchUser(values).then(
-          user => {
-            store.logIn();
-            store.setActiveUser(user)
-            this.props.routing.replace(store.redirectPath);
-          },
-          err => {
-            message.error(err);
-          }
-        );
+        return store.fetchUser(values).then(() => store.errors.map(errMsg => message.error(errMsg)));
       }
     });
   }

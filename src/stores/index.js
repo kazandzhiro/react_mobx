@@ -3,18 +3,18 @@ import api from '../mocks/api';
 
 class Store {
 
-  @observable errors = {};
+  @observable errors = [];
   @observable product = {};
   @observable products = [];
   @observable isLoggedIn = false;
   @observable redirectPath = '/';
   @observable user = {};
-  @observable loading = false;
+  @observable isLoading = false;
   @observable redirect = false;
 
   inProgress = () => {
-    this.loading = true;
-    this.errors = {};
+    this.isLoading = true;
+    this.errors = [];
   }
 
   @action
@@ -30,9 +30,14 @@ class Store {
   setActiveUser = userData => this.user = userData;
 
   @action
-  handleErrors = (err) => {
-    this.errors = {error: err.message}
-    this.loading = false;
+  handleErrors = (errMsg) => {
+    this.errors.push(errMsg);
+    this.isLoading = false;
+  }
+
+  @action
+  resetErrors() {
+    this.errors = [];
   }
 
   @action
@@ -44,9 +49,23 @@ class Store {
   fetchAllProducts = async() => {
     this.inProgress();
     try{
-      const products = await api.fetchAllProducts();
-      this.products = products;
-      this.loading = false;
+      this.products = await api.fetchAllProducts();;
+      this.isLoading = false;
+    } catch(err) {
+        this.handleErrors(err);
+    }
+  }
+
+  @action
+  fetchUser = async(user) => {
+    this.inProgress();
+    try{
+      const foundUser = await api.fetchUser(user);
+      if(foundUser) {
+        this.logIn();
+        this.setActiveUser(foundUser)
+      }
+      this.isLoading = false;
     } catch(err) {
         this.handleErrors(err);
     }
@@ -59,7 +78,7 @@ class Store {
       const response = await this.service.create(product);
       this.entities.push(response);
       this.redirect = true;
-      this.loading = false;
+      this.isLoading = false;
     } catch(err) {
         this.handleErrors(err);
     } finally {
@@ -73,7 +92,7 @@ class Store {
     try {
       const response = await this.service.get(_id)
       this.product = response;
-      this.loading = false;
+      this.isLoading = false;
     } catch(err) {
       this.handleErrors(err)
     }
@@ -86,7 +105,7 @@ class Store {
       const response = await this.service.patch(_id, product);
       this.entities = this.entities.map(item => item._id === response._id ? response : item);
       this.redirect = true;
-      this.loading = false;
+      this.isLoading = false;
     } catch(err) {
       this.handleErrors(err)
     } finally {
