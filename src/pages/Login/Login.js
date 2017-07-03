@@ -23,7 +23,7 @@ class Login extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { store } = this.props;
+    const { store, location } = this.props;
     const form = (
       <Form onSubmit={this.handleSubmit} className="login-form">
         <FormItem>
@@ -55,7 +55,10 @@ class Login extends React.Component {
         </FormItem>
       </Form>
     );
-    return store.isLoggedIn ? <Redirect to='/' /> : form;
+    return store.isLoggedIn ? <Redirect to={
+      { pathname: location.state.redirectUrl,
+        state: {redirectUrl: location.state.redirectUrl}
+      }} /> : form;
   }
 }
 export default withRouter(Form.create()(Login));

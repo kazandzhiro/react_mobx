@@ -7,22 +7,6 @@ import ProductForm from './components/ProductForm';
 @observer
 class Product extends React.Component {
 
-  createIntent() {
-    const { match: { params }, store } = this.props;
-    const id = +params.id;
-    const action = isNaN(id) ? params.id : (params.action || 'read');
-    return {store, action, id};
-  }
-
-  componentWillMount() {
-    const { action, store } = this.createIntent();
-    const permissions = store.user.permissions;
-
-    if(!~permissions.indexOf(action.toUpperCase())) {
-      this.props.history.push('/forbidden')
-    }
-  }
-
   fetchProduct(store, id, readOnly) {
     store.fetchProduct(id);
     return <ProductForm readOnly={readOnly} productId={id} />;
@@ -32,8 +16,9 @@ class Product extends React.Component {
     store.delete(id);
     return <Redirect to='/' />;
   }
-  // FIXME: We loading indicators here to improve UX
-  renderStrategy({store, action, id}) {
+
+  render() {
+    const { store, action, id } = this.props;
     switch(action) {
       case 'create': return <ProductForm />;
       case 'read': return this.fetchProduct(store, id, true);
@@ -41,10 +26,6 @@ class Product extends React.Component {
       case 'delete': return this.deleteProduct(store, id, false);
       default: return <Redirect to='/404' />;
     }
-  }
-
-  render() {
-    return this.renderStrategy(this.createIntent());
   }
 }
 

@@ -23,9 +23,6 @@ class Store {
   logOut = () => this.isLoggedIn = false;
 
   @action
-  setRedirectUrl = pathname => pathname !== '/login' ? this.redirectPath = pathname : '/';
-
-  @action
   setActiveUser = userData => this.user = userData;
 
   @action
